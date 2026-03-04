@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创业IP账号违规智能排查助手</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background-color: #f4f5f7;
+            color: #333;
+            margin: 0;
+            padding: 15px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 { text-align: center; color: #d32f2f; font-size: 24px; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 20px; }
+        
+        .step-header {
+            background-color: #1565c0;
+            color: white;
+            padding: 10px 15px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .alert-box {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            border-left: 5px solid #d32f2f;
+            margin-bottom: 20px;
+        }
+
+        /* 纯代码制作的6大截图展示区（永远不会裂图） */
+        .screenshot-list {
+            background-color: #fff;
+            border: 1px dashed #ef9a9a;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .screenshot-title {
+            color: #d32f2f;
+            font-size: 15px;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .screenshot-item {
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            color: #333;
+            font-weight: normal;
+        }
+        .screenshot-number {
+            background-color: #d32f2f;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* 醒目的蓝色提示框 */
+        .tips-box {
+            background-color: #e3f2fd;
+            border: 2px dashed #1565c0;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #0d47a1;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        /* 按钮与输入框样式 */
+        .text-area-box { width: 100%; height: 120px; padding: 10px; font-size: 16px; border: 2px solid #ccc; border-radius: 8px; box-sizing: border-box; margin-top: 10px; }
+        .btn-primary { display: block; width: 100%; background-color: #e53935; color: white; border: none; padding: 15px; font-size: 18px; font-weight: bold; border-radius: 8px; margin: 15px 0; cursor: pointer; text-align: center; }
+        
+        /* 选项卡样式 */
+        .tabs { display: flex; justify-content: space-around; background: #e0e0e0; border-radius: 8px; overflow: hidden; margin-bottom: 15px;}
+        .tab { flex: 1; text-align: center; padding: 12px 0; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        .tab.active { background: #1565c0; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .btn-list { display: block; width: 100%; background-color: #f8f9fa; color: #333; border: 2px solid #e0e0e0; padding: 15px; font-size: 16px; font-weight: bold; border-radius: 8px; margin: 10px 0; cursor: pointer; text-align: left; }
+        .result-box { display: none; background-color: #e8f5e9; padding: 15px; border-radius: 8px; margin-top: -5px; margin-bottom: 15px; border: 1px solid #c8e6c9; font-size: 15px; }
+        
+        .highlight { color: #d32f2f; font-weight: bold; }
+        .success { color: #2e7d32; font-weight: bold; }
+        #check-feedback { margin-top: 10px; padding: 12px; border-radius: 5px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🚨 创业IP违规智能排查助手</h1>
+    <div class="subtitle">100%基于《创业IP违规处理流程》知识库</div>
+
+    <div class="alert-box">
+        <b>⚠️ 陪跑老师重要提醒：</b><br>
+        遇到违规先不要删除视频！请先准备好下方【6大截图】发给老师，并用本工具查明原因！
+        
+        <div class="screenshot-list">
+            <div class="screenshot-title">📸 诊断原因必备的【6大截图】</div>
+            <div class="screenshot-item"><span class="screenshot-number">1</span> 创作者中心 - 账号检测截图</div>
+            <div class="screenshot-item"><span class="screenshot-number">2</span> 私信入口 - 单视频判罚通知截图</div>
+            <div class="screenshot-item"><span class="screenshot-number">3</span> 账号主页后台截图</div>
+            <div class="screenshot-item"><span class="screenshot-number">4</span> 单视频播放量数据截图</div>
+            <div class="screenshot-item"><span class="screenshot-number">5</span> 视频下方评论区截图（含您的回复）</div>
+            <div class="screenshot-item"><span class="screenshot-number">6</span> 最近24小时内私信回复截图</div>
+        </div>
+    </div>
+
+    <div class="step-header">🔍 第一步：粘贴文案，查违禁词</div>
+    
+    <div class="tips-box">
+        <b>💡 简单绝招：如何提取图片上的文案？</b><br>
+        1. 请在<b>微信</b>里打开您的【视频文案截图】。<br>
+        2. 手指<b>长按屏幕</b>，点击<b>【提取文字】</b>。<br>
+        3. 复制文字后，<b>粘贴</b>到下方的方框内即可！
+    </div>
+    
+    <textarea id="main-input" class="text-area-box" placeholder="请在这里粘贴您从微信提取的【视频文案】..."></textarea>
+    <button class="btn-primary" onclick="checkForbiddenWords()">🚀 一键查违规词</button>
+    
+    <div id="check-feedback"></div>
+
+    <div class="step-header">📋 第二步：收到官方判罚通知？手动对照排查</div>
+    
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('wx')">微信视频号</div>
+        <div class="tab" onclick="switchTab('dy')">抖音</div>
+        <div class="tab" onclick="switchTab('ks')">快手</div>
+    </div>
+
+    <div id="wx" class="tab-content active">
+        <button class="btn-list" onclick="toggleResult('wx1')">👉 提示：发布利诱、承诺/暗示收益等营销内容</button>
+        <div id="wx1" class="result-box">
+            <p><b>🔍 知识库诊断：</b> 意图违规或画面违规。视频文案存在“带你赚钱”等金融承诺；或画面中出现了广告牌、公司logo、甚至“AI”字样。</p>
+            <p><b>🛠️ 解决方案：</b> 隐藏或删除该老作品，流量跑停后立马删除。保持账号发10条原创高质量安全作品。</p>
+        </div>
+
+        <button class="btn-list" onclick="toggleResult('wx2')">👉 提示：视频内容疑似存在虚假宣传/诈骗风险</button>
+        <div id="wx2" class="result-box">
+            <p><b>🔍 知识库诊断：</b> 主要是账号包装违规或话题标签堆砌。名字带有“收徒”、“带你创业”等，简介或置顶视频留了联系方式。</p>
+            <p><b>🛠️ 解决方案：</b> 名字去掉收徒/带创业字眼；简介不能放联系方式。发布视频时话题标签固定在4个，不要堆砌。</p>
+        </div>
+
+        <button class="btn-list" onclick="toggleResult('wx3')">👉 提示：提供招商加盟/创业项目等服务（待完善资质）</button>
+        <div id="wx3" class="result-box">
+            <p><b>🔍 知识库诊断：</b> 短时间内连续发布强迫用户互动或“找徒弟”性质的文案，触发了企业资质认证限制。</p>
+            <p><b>🛠️ 解决方案：</b> 控制此类文案发布频率，流量跑停后删除；账号需进行七天静默期处理（不发作品），之后发安全泛流量走播。</p>
+        </div>
+        
+        <button class="btn-list" onclick="toggleResult('wx4')">👉 提示：该视频与已发表视频高度相似，暂无法确认为原创</button>
+        <div id="wx4" class="result-box">
+            <p><b>🔍 知识库诊断：</b> 重复发布了相同的素材。</p>
+            <p><b>🛠️ 解决方案：</b> 重复发布前切记要将之前发布的作品隐藏或删除，且发布间隔最少要有两周。</p>
+        </div>
+
+        <button class="btn-list" onclick="toggleResult('wx5')">👉 提示：利用恐吓、道德绑架、获得好运等强迫用户互动</button>
+        <div id="wx5" class="result-box">
+            <p><b>🔍 知识库诊断：</b> 文案中含有“恭喜我的都是贵人”、“给我点赞的人都是我要帮的人”、“敢不敢给我点一个”等因果关系和强迫诱导句式。</p>
+            <p><b>🛠️ 解决方案：</b> 播放量过万后删除或隐藏该视频，剔除诱导互动的词汇。</p>
+        </div>
+
+        <button class="btn-list" onclick="toggleResult('wx6')">👉 隐形限流：账号质量不符合运营规范 / 流量骤降</button>
+        <div id="wx6" class="result-box">
+            <p><b>🔍 知识库诊断：</b> 触发了反审机制（老视频被挖坟判罚），或者是刚解封就立马发重度营销型视频。</p>
+            <p><b>🛠️ 解决方案：</b> 爆流后第一时间自查前30天视频并隐藏擦边视频。限流期间发“纯鸡汤语录”或“信任型视频”一周，清理营销属性重的视频。</p>
+        </div>
+    </div>
+
+    <div id="dy" class="tab-content">
+        <button class="btn-list" onclick="toggleResult('dy1')">👉 提示：涉嫌发布未经证实的招聘导流信息</button>
+        <div id="dy1" class="result-box">
+            <p><b>🔍 知识库诊断：</b> 系统检测出导流行为，通常会导致整个账号的视频同一时间全被卡审或限流。</p>
+            <p><b>🛠️ 解决方案：</b> 静默处理 / 考虑注销重开 / 每天删三条违规作品。</p>
+        </div>
+        
+        <button class="btn-list" onclick="toggleResult('dy2')">👉 提示：含有诱导他人互动的内容</button>
+        <div id="dy2" class="result-box">
+            <p><b>🔍 知识库诊断：</b> 文案存在明确因果关系。例如“普通人根本刷不到我，请留下一句我要发财”、“人越没有钱就越要记住这8句话，钱会追着你跑”。</p>
+            <p><b>🛠️ 解决方案：</b> 直接删除违规视频即可，摒弃此类文案。</p>
+        </div>
+
+        <button class="btn-list" onclick="toggleResult('dy3')">👉 提示：可能存在批量发布违规或低质内容的行为</button>
+        <div id="dy3" class="result-box">
+            <p><b>🔍 知识库诊断：</b> 画面违规，在抖音上频繁发布大字报画面，或文案直接带有“都来找我做互联网”等低质导流。</p>
+            <p><b>🛠️ 解决方案：</b> 删除视频，后续不要再在抖音上发布大字报形式的视频。</p>
+        </div>
+    </div>
+
+    <div id="ks" class="tab-content">
+        <button class="btn-list" onclick="toggleResult('ks1')">👉 提示：可能存在发布刷单兼职虚假内容的行为</button>
+        <div id="ks1" class="result-box">
+            <p><b>🔍 知识库诊断：</b> 属于账号引流过重，或者是给创业IP的作品投流导致的封禁。</p>
+            <p><b>🛠️ 解决方案：</b> 新号简介先不要放有引导性质的联系方式；切记，创业IP的作品不要投流！！！</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 违禁词库 (基于知识库提取)
+    const forbiddenWords = {
+        "帮": "幇、邦", "点赞": "👍、典", "带你": "代你", "扶你": "抚你、技你",
+        "学习": "学刁", "停留": "停溜", "私信": "后抬滴滴、后抬戳我", "赚钱": "挣前、搞米",
+        "教": "交孝", "刷": "唰", "钱": "💰、前、米", "自媒体": "自媒 本",
+        "万": "萬", "直播": "植播", "赚": "挣、砖", "带货": "代货",
+        "短视频": "段视频", "事业": "事叶", "微信": "VX"
+    };
+
+    // 执行查违规词函数
+    function checkForbiddenWords() {
+        let text = document.getElementById('main-input').value.trim();
+        let checkFeedback = document.getElementById('check-feedback');
+
+        // 隐藏并清空之前的反馈
+        checkFeedback.style.display = "none";
+
+        if (text === "") {
+            checkFeedback.style.display = "block";
+            checkFeedback.style.backgroundColor = "#fff3e0";
+            checkFeedback.style.border = "1px solid #ffe0b2";
+            checkFeedback.innerHTML = "<span class='highlight'>⚠️ 提示：请先粘贴您提取的文案内容！</span>";
+            return;
+        }
+
+        // 跑文案基础违禁词排查
+        let foundWords = [];
+        for (let word in forbiddenWords) {
+            if (text.includes(word)) {
+                foundWords.push({ word: word, replace: forbiddenWords[word] });
+            }
+        }
+
+        if (foundWords.length > 0) {
+            checkFeedback.style.display = "block";
+            checkFeedback.style.backgroundColor = "#ffebee";
+            checkFeedback.style.border = "1px solid #ffcdd2";
+            let resultHTML = "<p class='highlight'>⚠️ 警报！当前文案中发现以下【违禁词】：</p><ul>";
+            foundWords.forEach(item => {
+                resultHTML += `<li>包含 <b>【${item.word}】</b>，建议修改为 👉 <span style="color:#1565c0;font-weight:bold;">${item.replace}</span></li>`;
+            });
+            resultHTML += "</ul>";
+            checkFeedback.innerHTML = resultHTML;
+            checkFeedback.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+            // 如果没有基础违禁词
+            checkFeedback.style.display = "block";
+            checkFeedback.style.backgroundColor = "#e8f5e9";
+            checkFeedback.style.border = "1px solid #c8e6c9";
+            checkFeedback.innerHTML = `<p class="success">✅ 文本中未检测出基础违禁词。</p><p style="font-size:14px;color:#666;">注：如果您是收到了官方的违规处罚，请直接在下方<b>【第二步】</b>手动选择平台和提示排查原因！</p>`;
+        }
+    }
+
+    // 平台Tab切换
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        document.querySelector(`.tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    }
+
+    // 展开/收起详情
+    function toggleResult(id) {
+        var x = document.getElementById(id);
+        x.style.display = (x.style.display === "none" || x.style.display === "") ? "block" : "none";
+    }
+</script>
+
+</body>
+</html>
